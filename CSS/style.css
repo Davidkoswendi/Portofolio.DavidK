@@ -21,6 +21,11 @@
         background-position: 100% 50%;
     }
 }
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
 
 /* GLOBAL STYLES */
 body {
@@ -315,7 +320,7 @@ section .content {
     }
 
     .image model-viewer {
-        width: 120%;
+        width: 100%;
     }
 
     .content .main-content {
