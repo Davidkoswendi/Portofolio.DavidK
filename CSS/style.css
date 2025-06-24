@@ -238,7 +238,7 @@ section .content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* Center the certificate items */
-    gap: 20px; /* Space between items */
+    gap: 40px; /* Space between items */
 }
 
 .certificate-item {
