@@ -271,7 +271,7 @@ in the world of technology and web development.</p>
         </div>
     </div>
 </section>
- <!-- Chat Widget HTML -->
+  <!-- Chat Widget HTML -->
     <div class="chat-widget">
         <button class="chat-button" id="chatToggle">💬</button>
         <div class="chat-container" id="chatContainer">
@@ -281,7 +281,7 @@ in the world of technology and web development.</p>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot-message">
-                    👋 Hello there! I'm David's virtual assistant. How can I help you today? Please select a category below!
+                    👋 Hello there! I'm David's virtual assistant. How can I help you today?
                 </div>
             </div>
             <div class="quick-questions">
@@ -330,7 +330,11 @@ in the world of technology and web development.</p>
                 </select>
             </div>
             <div class="typing-indicator" id="typingIndicator">
-                David is typing...
+                <div class="typing-bubbles">
+                    <div class="typing-bubble"></div>
+                    <div class="typing-bubble"></div>
+                    <div class="typing-bubble"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -522,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-   document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
             const chatToggle = document.getElementById('chatToggle');
             const chatContainer = document.getElementById('chatContainer');
@@ -532,6 +536,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const categoryDropdown = document.getElementById('categoryDropdown');
             const questionDropdowns = document.querySelectorAll('.question-dropdown');
             
+            let selectedCategory = null;
+            let selectedQuestion = null;
+
             // Enhanced Question-Answer pairs with emojis
             const faqDatabase = {
                 about: {
@@ -564,12 +571,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Toggle chat visibility
             chatToggle.addEventListener('click', function() {
                 chatContainer.style.display = 'flex';
-                this.style.display = 'none'; // Hide the circle button
+                this.style.display = 'none';
             });
 
             chatClose.addEventListener('click', function() {
                 chatContainer.style.display = 'none';
-                chatToggle.style.display = 'flex'; // Show the circle button again
+                chatToggle.style.display = 'flex';
             });
 
             // Handle category selection
@@ -577,16 +584,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Hide all question dropdowns first
                 questionDropdowns.forEach(dropdown => {
                     dropdown.style.display = 'none';
-                    dropdown.selectedIndex = 0;
                 });
                 
-                // Show the selected category's question dropdown
                 if (this.value) {
-                    const selectedDropdown = document.getElementById(`${this.value}Questions`);
-                    selectedDropdown.style.display = 'block';
-                    
-                    // Add visual feedback in chat
-                    addMessage(`You selected: ${this.options[this.selectedIndex].text.replace('🤔 ', '')}`, 'bot');
+                    selectedCategory = this.options[this.selectedIndex].text;
+                    document.getElementById(`${this.value}Questions`).style.display = 'block';
+                } else {
+                    selectedCategory = null;
                 }
             });
 
@@ -596,13 +600,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (this.value) {
                         const category = this.id.replace('Questions', '');
                         const question = this.value;
-                        const questionText = this.options[this.selectedIndex].text;
+                        selectedQuestion = this.options[this.selectedIndex].text;
                         
-                        // Show typing indicator
+                        // Show both selections in chat as user message
+                        const fullMessage = `${selectedCategory}<br>${selectedQuestion}`;
+                        addMessage(fullMessage, 'user');
+                        
+                        // Show typing indicator with animation
                         typingIndicator.style.display = 'block';
-                        
-                        // Add the question to chat
-                        addMessage(questionText, 'bot');
                         
                         // Simulate typing delay
                         setTimeout(() => {
@@ -619,10 +624,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             this.selectedIndex = 0;
                             categoryDropdown.selectedIndex = 0;
                             this.style.display = 'none';
+                            selectedCategory = null;
+                            selectedQuestion = null;
                             
                             // Scroll to bottom
                             chatMessages.scrollTop = chatMessages.scrollHeight;
-                        }, 1000);
+                        }, 1500); // Longer delay to see typing animation
                     }
                 });
             });
@@ -630,7 +637,7 @@ document.addEventListener('DOMContentLoaded', function() {
             function addMessage(text, sender) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
-                messageDiv.classList.add('bot-message');
+                messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
                 messageDiv.innerHTML = text;
                 chatMessages.appendChild(messageDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -641,7 +648,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const isClickInside = chatContainer.contains(event.target) || event.target === chatToggle;
                 if (!isClickInside && chatContainer.style.display === 'flex') {
                     chatContainer.style.display = 'none';
-                    chatToggle.style.display = 'flex'; // Show the circle button again
+                    chatToggle.style.display = 'flex';
                 }
             });
         });
