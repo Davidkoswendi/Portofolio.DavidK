@@ -271,6 +271,70 @@ in the world of technology and web development.</p>
         </div>
     </div>
 </section>
+ <!-- Chat Widget HTML -->
+    <div class="chat-widget">
+        <button class="chat-button" id="chatToggle">💬</button>
+        <div class="chat-container" id="chatContainer">
+            <div class="chat-header">
+                <span>Ask Me Anything! 🚀</span>
+                <button class="chat-close" id="chatClose" aria-label="Close chat">×</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    👋 Hello there! I'm David's virtual assistant. How can I help you today? Please select a category below!
+                </div>
+            </div>
+            <div class="quick-questions">
+                <select class="category-dropdown" id="categoryDropdown">
+                    <option value="">✨ Select a category...</option>
+                    <option value="about">📌 About the Website</option>
+                    <option value="portfolio">💼 Portfolio Projects</option>
+                    <option value="skills">🛠️ Skills & Expertise</option>
+                    <option value="contact">📞 Contact Information</option>
+                    <option value="technical">🔧 Technical Details</option>
+                </select>
+                
+                <select class="question-dropdown" id="aboutQuestions">
+                    <option value="">🤔 Select a question...</option>
+                    <option value="purpose">What's the purpose of this website?</option>
+                    <option value="owner">Who created this website?</option>
+                    <option value="tech">What technologies were used?</option>
+                </select>
+                
+                <select class="question-dropdown" id="portfolioQuestions">
+                    <option value="">🤔 Select a question...</option>
+                    <option value="projects">What projects are showcased?</option>
+                    <option value="view">Can I see more project details?</option>
+                    <option value="collaborate">Can we collaborate?</option>
+                </select>
+                
+                <select class="question-dropdown" id="skillsQuestions">
+                    <option value="">🤔 Select a question...</option>
+                    <option value="languages">What programming languages do you know?</option>
+                    <option value="experience">How much experience do you have?</option>
+                    <option value="certificates">Where can I see your certificates?</option>
+                </select>
+                
+                <select class="question-dropdown" id="contactQuestions">
+                    <option value="">🤔 Select a question...</option>
+                    <option value="best">What's the best way to contact you?</option>
+                    <option value="response">How quickly do you respond?</option>
+                    <option value="availability">What are your working hours?</option>
+                </select>
+                
+                <select class="question-dropdown" id="technicalQuestions">
+                    <option value="">🤔 Select a question...</option>
+                    <option value="performance">How was performance optimized?</option>
+                    <option value="responsive">Is the website mobile-friendly?</option>
+                    <option value="animation">What animation libraries were used?</option>
+                </select>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                David is typing...
+            </div>
+        </div>
+    </div>
+
 <!-- Contact Section -->
 <section id="contact">
     <div class="contact-content">
@@ -457,6 +521,130 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100); // Adjust delay as needed
     });
 });
+
+   document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const chatToggle = document.getElementById('chatToggle');
+            const chatContainer = document.getElementById('chatContainer');
+            const chatClose = document.getElementById('chatClose');
+            const chatMessages = document.getElementById('chatMessages');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const categoryDropdown = document.getElementById('categoryDropdown');
+            const questionDropdowns = document.querySelectorAll('.question-dropdown');
+            
+            // Enhanced Question-Answer pairs with emojis
+            const faqDatabase = {
+                about: {
+                    purpose: "🌟 <strong>This is my digital portfolio!</strong> It showcases my skills, projects, and experience in web development. Think of it as my interactive resume designed to impress potential clients and employers!",
+                    owner: "👨‍💻 <strong>I'm David Koswendi</strong>, a passionate Software Engineering student at SMKN 4 Bandung. I built this website from scratch to demonstrate my web development capabilities and share my journey!",
+                    tech: "🛠️ <strong>Built with:</strong> HTML5, CSS3, JavaScript, plus awesome libraries like AOS for animations and Model-Viewer for 3D elements. The contact form uses Web3Forms for reliable message delivery. Everything is optimized for performance!"
+                },
+                portfolio: {
+                    projects: "📂 <strong>My portfolio includes:</strong> Registration forms, personal websites, e-commerce platforms, and a cinema booking system. Each project demonstrates different skills - from frontend design to backend functionality!",
+                    view: "👀 <strong>Absolutely!</strong> You can see screenshots of each project in the portfolio section. Some even have live demos available - just ask me about them! I'd be happy to walk you through any project in more detail.",
+                    collaborate: "🤝 <strong>I'd love to collaborate!</strong> I'm always open to exciting projects and partnerships. Check out my contact section for ways to reach out - let's create something amazing together!"
+                },
+                skills: {
+                    languages: "💻 <strong>My tech stack includes:</strong> HTML, CSS, JavaScript, PHP, and MySQL. I'm also comfortable with Laravel for backend development. Always learning new technologies to expand my skillset!",
+                    experience: "📅 <strong>I've been coding</strong> for several years now with formal education in Software Engineering. My certificates section shows my official training, but I've also completed many personal projects to hone my skills.",
+                    certificates: "📜 <strong>Certificates available</strong> in the 'About Me' section! Each has a 'View' button showing the full document. These validate my training in various aspects of web development and programming."
+                },
+                contact: {
+                    best: "📱 <strong>Fastest ways to reach me:</strong> WhatsApp (+62 821-1447-9342) or email (davidkoswendi2007@gmail.com). I typically respond within hours during my working time!",
+                    response: "⏱️ <strong>I aim to reply</strong> within 24 hours (usually much faster during 9AM-5PM WIB, Monday-Friday). If it's urgent, WhatsApp is your best bet for a quick response!",
+                    availability: "🕘 <strong>Working hours:</strong> 9AM to 5PM Western Indonesia Time (WIB), Monday-Friday. I occasionally check messages outside these hours too, especially for exciting opportunities!"
+                },
+                technical: {
+                    performance: "⚡ <strong>Optimized through:</strong> Efficient coding, image compression, lazy loading, and minimal external requests. The AOS animations only trigger on scroll to save resources!",
+                    responsive: "📱 <strong>Fully responsive!</strong> Try resizing your browser - the layout adapts beautifully to all devices from desktop to mobile. Mobile-first approach ensures great experience everywhere!",
+                    animation: "🎬 <strong>Animation tools:</strong> Mainly AOS (Animate On Scroll) for scroll effects. The 3D laptop uses Model-Viewer, plus some custom CSS animations for that extra polish!"
+                }
+            };
+
+            // Toggle chat visibility
+            chatToggle.addEventListener('click', function() {
+                chatContainer.style.display = 'flex';
+                this.style.display = 'none'; // Hide the circle button
+            });
+
+            chatClose.addEventListener('click', function() {
+                chatContainer.style.display = 'none';
+                chatToggle.style.display = 'flex'; // Show the circle button again
+            });
+
+            // Handle category selection
+            categoryDropdown.addEventListener('change', function() {
+                // Hide all question dropdowns first
+                questionDropdowns.forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                    dropdown.selectedIndex = 0;
+                });
+                
+                // Show the selected category's question dropdown
+                if (this.value) {
+                    const selectedDropdown = document.getElementById(`${this.value}Questions`);
+                    selectedDropdown.style.display = 'block';
+                    
+                    // Add visual feedback in chat
+                    addMessage(`You selected: ${this.options[this.selectedIndex].text.replace('🤔 ', '')}`, 'bot');
+                }
+            });
+
+            // Handle question selection for all dropdowns
+            questionDropdowns.forEach(dropdown => {
+                dropdown.addEventListener('change', function() {
+                    if (this.value) {
+                        const category = this.id.replace('Questions', '');
+                        const question = this.value;
+                        const questionText = this.options[this.selectedIndex].text;
+                        
+                        // Show typing indicator
+                        typingIndicator.style.display = 'block';
+                        
+                        // Add the question to chat
+                        addMessage(questionText, 'bot');
+                        
+                        // Simulate typing delay
+                        setTimeout(() => {
+                            typingIndicator.style.display = 'none';
+                            
+                            // Display answer
+                            if (faqDatabase[category] && faqDatabase[category][question]) {
+                                addMessage(faqDatabase[category][question], 'bot');
+                            } else {
+                                addMessage("😕 I'm sorry, I don't have an answer for that question. Please try another one or contact me directly!", 'bot');
+                            }
+                            
+                            // Reset dropdowns
+                            this.selectedIndex = 0;
+                            categoryDropdown.selectedIndex = 0;
+                            this.style.display = 'none';
+                            
+                            // Scroll to bottom
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }, 1000);
+                    }
+                });
+            });
+
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add('bot-message');
+                messageDiv.innerHTML = text;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Close chat when clicking outside (except the toggle button)
+            document.addEventListener('click', function(event) {
+                const isClickInside = chatContainer.contains(event.target) || event.target === chatToggle;
+                if (!isClickInside && chatContainer.style.display === 'flex') {
+                    chatContainer.style.display = 'none';
+                    chatToggle.style.display = 'flex'; // Show the circle button again
+                }
+            });
+        });
     </script>
 </body>
 </html>
