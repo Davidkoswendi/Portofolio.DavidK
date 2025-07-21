@@ -275,7 +275,7 @@ in the world of technology and web development.</p>
     <div class="chat-widget">
         <button class="chat-button" id="chatToggle">💬</button>
         <div class="chat-container" id="chatContainer">
-            <div class="chat-header">
+            <div class="chat-header" id="chatHeader">
                 <span>Ask Me Anything! 🚀</span>
                 <button class="chat-close" id="chatClose" aria-label="Close chat">×</button>
             </div>
@@ -330,14 +330,18 @@ in the world of technology and web development.</p>
                 </select>
             </div>
             <div class="typing-indicator" id="typingIndicator">
-                <div class="typing-bubbles">
-                    <div class="typing-bubble"></div>
-                    <div class="typing-bubble"></div>
-                    <div class="typing-bubble"></div>
+                <div class="typing-message">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                    <span>Typing...</span>
                 </div>
             </div>
         </div>
     </div>
+
 
 <!-- Contact Section -->
 <section id="contact">
@@ -526,10 +530,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
- document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
             const chatToggle = document.getElementById('chatToggle');
             const chatContainer = document.getElementById('chatContainer');
+            const chatHeader = document.getElementById('chatHeader');
             const chatClose = document.getElementById('chatClose');
             const chatMessages = document.getElementById('chatMessages');
             const typingIndicator = document.getElementById('typingIndicator');
@@ -538,6 +543,43 @@ document.addEventListener('DOMContentLoaded', function() {
             
             let selectedCategory = null;
             let selectedQuestion = null;
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            // Draggable functionality
+            chatHeader.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+
+            function startDrag(e) {
+                if (e.target === chatClose) return;
+                
+                isDragging = true;
+                const rect = chatContainer.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                // Temporarily change cursor style during drag
+                document.body.style.cursor = 'grabbing';
+                chatContainer.style.cursor = 'grabbing';
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                
+                chatContainer.style.left = (e.clientX - offsetX) + 'px';
+                chatContainer.style.top = (e.clientY - offsetY) + 'px';
+                chatContainer.style.right = 'auto';
+                chatContainer.style.bottom = 'auto';
+            }
+
+            function endDrag() {
+                isDragging = false;
+                
+                // Restore cursor styles
+                document.body.style.cursor = '';
+                chatContainer.style.cursor = 'move';
+            }
 
             // Enhanced Question-Answer pairs with emojis
             const faqDatabase = {
@@ -572,6 +614,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chatToggle.addEventListener('click', function() {
                 chatContainer.style.display = 'flex';
                 this.style.display = 'none';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             });
 
             chatClose.addEventListener('click', function() {
@@ -595,6 +638,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Handle question selection for all dropdowns
+
+            // Handle question selection for all dropdowns
             questionDropdowns.forEach(dropdown => {
                 dropdown.addEventListener('change', function() {
                     if (this.value) {
@@ -606,12 +651,30 @@ document.addEventListener('DOMContentLoaded', function() {
                         const fullMessage = `${selectedCategory}<br>${selectedQuestion}`;
                         addMessage(fullMessage, 'user');
                         
-                        // Show typing indicator with animation
-                        typingIndicator.style.display = 'block';
+                        // Create and show typing indicator as a bot message
+                        const typingMessage = document.createElement('div');
+                        typingMessage.classList.add('typing-indicator');
+                        typingMessage.id = 'currentTypingIndicator';
+                        typingMessage.innerHTML = `
+                            <div class="typing-content">
+                                <div class="typing-dots">
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                </div>
+                                <span>Typing...</span>
+                            </div>
+                        `;
+                        chatMessages.appendChild(typingMessage);
+                        typingMessage.style.display = 'flex';
+                        
+                        // Scroll to bottom to see typing indicator
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
                         
                         // Simulate typing delay
                         setTimeout(() => {
-                            typingIndicator.style.display = 'none';
+                            // Remove typing indicator
+                            typingMessage.remove();
                             
                             // Display answer
                             if (faqDatabase[category] && faqDatabase[category][question]) {
@@ -629,17 +692,23 @@ document.addEventListener('DOMContentLoaded', function() {
                             
                             // Scroll to bottom
                             chatMessages.scrollTop = chatMessages.scrollHeight;
-                        }, 1500); // Longer delay to see typing animation
+                        }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5 seconds
                     }
                 });
             });
-
             function addMessage(text, sender) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
                 messageDiv.innerHTML = text;
                 chatMessages.appendChild(messageDiv);
+                
+                // Add slight delay for message appearance
+                messageDiv.style.opacity = 0;
+                setTimeout(() => {
+                    messageDiv.style.opacity = 1;
+                }, 10);
+                
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
