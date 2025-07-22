@@ -9,6 +9,50 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
+<div class="loading-overlay">
+  <div class="cyber-loader">
+    <div class="holo-terminal">
+      <div class="terminal-header">
+        <div class="leds">
+          <span class="led red"></span>
+          <span class="led yellow"></span>
+          <span class="led green"></span>
+        </div>
+        <div class="title"><span class="status-text">LOADING</span> PORTFOLIO</div>
+      </div>
+      
+      <div class="terminal-body">
+        <div class="code-line">> Initializing display systems...</div>
+        <div class="code-line">> Establishing secure connection...</div>
+        
+        <div class="asset-loading">
+          <div class="loading-text">> <span class="process-text">Loading</span> assets <span class="percent">0%</span></div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" style="--progress:0%"></div>
+              <div class="progress-glitch"></div>
+              <div class="progress-pulse"></div>
+              <div class="progress-complete"></div>
+            </div>
+            <div class="progress-caret">█</div>
+          </div>
+          <div class="progress-details">
+            <span class="filename">portfolio_interface.glb</span>
+            <span class="transfer-rate">4.5 MB/s</span>
+          </div>
+        </div>
+        
+        <div class="code-line remaining">> Time remaining: <span class="time">5.0s</span></div>
+      </div>
+      
+      <div class="scanlines"></div>
+      <div class="glow-effect"></div>
+    </div>
+    
+    <div class="holographic-grid"></div>
+    <div class="particles"></div>
+  </div>
+</div>
     <nav>
         <div class="nav-container">
             <div class="logo">
@@ -414,6 +458,116 @@ in the world of technology and web development.</p>
         AOS.init({offset: 120});
     </script>
     <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Add loading class to body
+  document.body.classList.add('loading-active');
+  
+  // Animate code lines sequentially
+  const codeLines = document.querySelectorAll('.code-line');
+  codeLines.forEach((line, i) => {
+    setTimeout(() => {
+      line.style.animationDelay = `${i * 0.4}s`;
+      line.style.animationDuration = '0.6s';
+    }, 100);
+  });
+  
+  // Set fixed 5 second duration
+  const startTime = Date.now();
+  const duration = 5000; // 5 seconds
+  const loader = document.querySelector('.cyber-loader');
+  const overlay = document.querySelector('.loading-overlay');
+  
+  // Animation elements
+  const progressFill = document.querySelector('.progress-fill');
+  const percentText = document.querySelector('.percent');
+  const timeText = document.querySelector('.time');
+  const statusText = document.querySelector('.status-text');
+  const processText = document.querySelector('.process-text');
+  
+  function animate() {
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const percent = Math.floor(progress * 100);
+    
+    // Update progress bar
+    progressFill.style.setProperty('--progress', `${percent}%`);
+    percentText.textContent = `${percent}%`;
+    
+    // Update remaining time
+    const remaining = ((duration - elapsed) / 1000).toFixed(1);
+    timeText.textContent = `${Math.max(0, remaining)}s`;
+    
+    // Random transfer rate fluctuation
+    const transferRate = (4.2 + Math.random() * 0.6).toFixed(1);
+    document.querySelector('.transfer-rate').textContent = `${transferRate} MB/s`;
+    
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      // Complete animation
+      progressFill.style.setProperty('--progress', '100%');
+      percentText.textContent = '100%';
+      timeText.textContent = '0.0s';
+      
+      // Switch to complete state
+      loader.classList.add('loader-complete');
+      statusText.textContent = 'COMPLETE';
+      processText.textContent = 'Loaded';
+      
+      // Add completion message
+      setTimeout(() => {
+        const completeLine = document.createElement('div');
+        completeLine.className = 'code-line complete-message';
+        completeLine.textContent = '> All systems operational. Welcome!';
+        document.querySelector('.terminal-body').appendChild(completeLine);
+        completeLine.style.animation = 'fadeIn 0.6s ease-out forwards';
+        
+        // Remove blur from page content
+        document.body.classList.remove('loading-active');
+        
+        // Fade out loader after showing completion
+        setTimeout(() => {
+          overlay.classList.add('fade-out');
+          setTimeout(() => {
+            overlay.remove();
+          }, 800);
+        }, 1500); // Show complete state for 1.5s before fading
+      }, 300);
+    }
+  }
+  
+  // Start animation
+  animate();
+  
+  // Create floating particles
+  for (let i = 0; i < 20; i++) {
+    createParticle();
+  }
+  
+  function createParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    document.querySelector('.particles').appendChild(particle);
+    
+    // Random properties
+    const size = Math.random() * 4 + 1;
+    const posX = Math.random() * 100;
+    const posY = Math.random() * 100;
+    const duration = Math.random() * 10 + 10;
+    const delay = Math.random() * 5;
+    
+    particle.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      background: rgba(252, 166, 31, ${Math.random() * 0.4 + 0.1});
+      position: absolute;
+      top: ${posY}%;
+      left: ${posX}%;
+      border-radius: 50%;
+      animation: floatParticle ${duration}s linear ${delay}s infinite;
+    `;
+  }
+});
         const hamburg = document.querySelector('.hamburg');
         const cancel = document.querySelector('.cancel');
         const navbar = document.querySelector('.dropmenu');
