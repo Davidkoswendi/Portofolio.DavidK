@@ -1858,73 +1858,7 @@ body.loading-active > *:not(.loading-overlay) {
   border-radius: 50%;
   animation: floatParticle 3s linear forwards;
 }
-/* ===== RESPONSIVE ADJUSTMENTS ===== */
-@media (max-width: 768px) {
-  .cyber-loader {
-    max-width: 90%;
-    transform: scale(0.9);
-  }
-  
-  .holo-terminal {
-    transform: perspective(500px) rotateX(5deg);
-    border-width: 0.5px;
-  }
-  
-  .terminal-header {
-    padding: 8px 12px;
-  }
-  
-  .leds {
-    gap: 5px;
-    margin-right: 10px;
-  }
-  
-  .led {
-    width: 10px;
-    height: 10px;
-  }
-  
-  .title {
-    font-size: 13px;
-    letter-spacing: 1px;
-  }
-  
-  .terminal-body {
-    padding: 15px;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  
-  .asset-loading {
-    margin: 15px 0;
-  }
-  
-  .loading-text {
-    margin-bottom: 8px;
-    gap: 8px;
-  }
-  
-  .progress-bar {
-    height: 18px;
-  }
-  
-  .progress-caret {
-    font-size: 15px;
-  }
-  
-  .progress-details {
-    font-size: 11px;
-  }
-  
-  .remaining {
-    margin-top: 10px;
-  }
-  
-  /* Pertahankan ukuran grid asli */
-  .holographic-grid {
-    background-size: 50px 50px !important;
-  }
-}
+
 
 /* Untuk layar sangat kecil (contoh: smartphone portrait) */
 @media (max-width: 480px) {
