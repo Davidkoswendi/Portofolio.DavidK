@@ -1929,7 +1929,7 @@ body.loading-active > *:not(.loading-overlay) {
   }
   
   .holo-terminal {
-    animation: terminalFloat 4s ease-in-out infinite;
+    animation: terminalFloat 3s ease-in-out infinite;
   }
   
   /* Kurangi efek partikel saja, grid tetap */
@@ -1939,28 +1939,7 @@ body.loading-active > *:not(.loading-overlay) {
   }
 }
 
-/* Nonaktifkan beberapa efek untuk reduced motion */
-@media (prefers-reduced-motion) {
-  .holo-terminal,
-  .led,
-  .progress-glitch,
-  .progress-pulse,
-  .glow-effect,
-  .particles::before,
-  .scanlines,
-  .status-text {
-    animation: none !important;
-  }
-  
-  /* Tetap pertahankan animasi grid */
-  .holographic-grid {
-    animation: gridScroll 5s linear infinite !important;
-  }
-  
-  .progress-caret {
-    animation: blink 1s step-end infinite !important;
-  }
-}
+
 /* Minimal GitHub Welcome Popup */
 .github-welcome-overlay {
   position: fixed;
